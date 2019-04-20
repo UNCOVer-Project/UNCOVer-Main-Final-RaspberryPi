@@ -37,7 +37,6 @@ class SpeechRecognition:
         else:
             mic = sr.Microphone(device_index=device_index)
 
-        # Receiving user input
         with mic as source:
             print('Please silent...')
             r.adjust_for_ambient_noise(source)
@@ -45,13 +44,11 @@ class SpeechRecognition:
             audio = r.listen(source)
 
         print('Done recording...')
-        # Recognizing user input by using azure
         text = ''
         try:
             text = r.recognize_azure(
                 audio, self.token_key, location='southeastasia'
             )
-        # If user voice input is not recognized
         except sr.UnknownValueError:
             print('The voice is not recognizable')
             text = ''
