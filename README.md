@@ -19,7 +19,7 @@ UNCOVer is a project to help sightless person to see objects and tell it's posit
   Extract rich information from images to categorize and process visual data—and perform machine‑assisted moderaon of images.
 
   <h5>Azure Speech Services</h5>
-  Swily convert audio to text for natural responsiveness. The Speech to Text and Text to Speech API is part of the Speech services.
+  Swiftly convert audio to text for natural responsiveness. The Speech to Text and Text to Speech API is part of the Speech services.
 
   <h5>Azure Custom Vision</h5>
   Azure Custom Vision are used for to train a model of index finger. UNCOVer will use this custom vision to detect index finger of the user and decide what object is pointed using our algorithm
@@ -39,7 +39,7 @@ UNCOVer is a project to help sightless person to see objects and tell it's posit
 	<li> Raspberry Pi 3B+ </li>
   	<li> Raspberry Battery Pack </li>
 	<li> Camera Module </li>
-  <li> Earphone </li>
+  	<li> Earphone </li>
 </ul>
 
 <br> <br>
@@ -79,6 +79,9 @@ Install the following dependencies via pip:
   <br/>
   <h5>A Quickstart guide on using Azure Text-to-Speech on Python</h5>
   https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/quickstart-python-text-to-speech
+  <br/>
+  <h5>A Quickstart guide on using Azure Custom Vision</h5>
+  https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/
   <br/>
 
 
