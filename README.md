@@ -1,4 +1,3 @@
-# UNCOVer-MainFinal
 
 <h1>UNCOVER PROJECT</h1>
 <h3>UNsighted COmputer Vision</h3>
