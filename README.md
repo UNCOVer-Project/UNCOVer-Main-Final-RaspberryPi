@@ -40,6 +40,7 @@ UNCOVer is a project to help sightless person to see objects and tell it's posit
   	<li> Raspberry Battery Pack </li>
 	<li> Camera Module </li>
   	<li> Earphone </li>
+	<li> Microphone </li>
 </ul>
 
 <br> <br>
