@@ -41,6 +41,7 @@ def imageCapture():
 
     '''
     cam.resolution = (2560, 1920)
+    # display current recording into screen for debugging purposes
     cam.start_preview()
     # time for user to aim the UNCOVer to desired scene
     sleep(2)
@@ -54,12 +55,13 @@ def ModeCommand():
         function to decide what user wants by voice command
         listening to user by speech_recognition then get the string of user's command
         the string command then being checked to certain keyword for each UNCOVer mode
+        command divided unto 2 category: main-command and sub-command
 
         there are 2 main command:
         1. turn off                 turning off the UNCOVer
         2. uncover                  start listening for further sub-command
         
-        4 sub-command:
+        4 sub-command(mode) for main-comman "uncover":
 
         Mode's code and name:
         # 0 -> object positions     (output object's name and position (left, center, right) by speech)
@@ -69,20 +71,23 @@ def ModeCommand():
         # 4 -> describe image       (describe image using AZURE vision by speech including dominant color, people's age and gender, brand, and description)
 
     '''
+
     sr1 = SpeechRecognition()
     listen = sr1.recognize()
+
     print(1, listen.lower())
     # decide which command is asked
     if "turn off" in listen.lower():
         sys.exit(0)
+
     elif "uncover" in listen.lower():
-        #
+
         sr2 = SpeechRecognition()
         playSound('sounds/notification.wav')
         listen = sr2.recognize()
         print(2, listen.lower())
 
-        # each mode keyword's
+        # each mode must-included-keyword's
         # if the user command contain all such keyword then such operation mode is activated
         com0 = ['what', 'front']
         com1 = ['what', 'point']
@@ -90,6 +95,7 @@ def ModeCommand():
         com3 = 'analyze'
         com4 = 'describe'
         
+        # count the number of valid keyword included
         ctr = 0
         for i in com0:
             if i in listen.lower():
@@ -144,7 +150,7 @@ while True:
         playSound('sounds/wrong.wav')
         continue
     
-    
+    # AZURE API SubscriptionKey
     visionSubKey = 'f21b4f194bb1480c8dde294d9baf18e7'
     ttsSubKey = 'd7f48f6fc6d34d6bae9b72814bbd0519'
     
@@ -156,6 +162,7 @@ while True:
         # activate UNCOVer's ObjectLocation operation mode
         objectDetect = ObjectDetection(visionSubKey, imageFile)
         objectDetect.DetectObject()
+        # obtain object location from AZURE
         objects = objectDetect.getDetectedObject()
 
         objectLoc = findObLoc(objects, getImageSize(imageFile))
@@ -214,18 +221,19 @@ while True:
 
         print(textCand)
 
-        # using PyAudio to output sound
+        # using AZURE to convert text unto sppech
         tts = TextToSpeech(ttsSubKey, textCand)
         tts.get_token()
         tts.save_audio('speech', 0)
 
+        # play the received audio file from AZURE 
         playSound('speech.mp3')
 
     elif mode == '1':
         # activate UNCOVer's PointedObject operation mode
         print('Start Initializing Pointed Object Detection')
 
-        # perfrom object detection
+        # perfrom object detection using AZURE
         objectDetect = ObjectDetection(visionSubKey, imageFile)
         objectDetect.DetectObject()
         objects = objectDetect.getDetectedObject()
@@ -268,16 +276,18 @@ while True:
             pointedText = 'You are pointing at: ' + closestObj[0]
 
         
-        # using PyAudio to output sound
+        # using AZURE to convert text unto sppech
         tts = TextToSpeech(ttsSubKey, pointedText)
         tts.get_token()
         tts.save_audio('pointedSpeech', 0)
-
+        
+        # play the received audio file from AZURE 
         playSound('pointedSpeech.mp3')
 
     elif mode == '2':
-        # activate UNCOVer's OpticalTextRecognition operation mode
+        # activate UNCOVer's OpticalCharacterRecognition operation mode
         print('Start Initializing OCR')
+        # perfrom OpticalCharacterRecognition using AZURE
         OCRecognizer = OCR(visionSubKey, imageFile)
         OCRecognizer.PerformOCR()
         
@@ -287,17 +297,18 @@ while True:
         if OCRText == "":
             playErrorSnd(PREM_NO_TEXT_DETECT)
         
-        # using PyAudio to output sound
+        # using AZURE to convert text unto sppech
         tts = TextToSpeech(ttsSubKey, OCRText)
         tts.get_token()
         tts.save_audio('ocrspeech', 0)
 
+        # play the received audio file from AZURE 
         playSound('ocrspeech.mp3')
 
     elif mode == '3':
         # activate UNCOVer's ImageAnalyzation operation mode
         print('Start Initalizing Image Analysis')
-
+        # perfrom ImageAnalyzation using AZURE
         analyzer = Analyze(visionSubKey, imageFile)
         analyzer.AnalyzeImage()
         analyzed = analyzer.GetResult()
@@ -337,16 +348,18 @@ while True:
 
         print(analysisText)
 
-        # using PyAudio to output sound
+        # using AZURE to convert text unto sppech
         tts = TextToSpeech(ttsSubKey, analysisText)
         tts.get_token()
         tts.save_audio('descspee', 0)
 
+        # play the received audio file from AZURE 
         playSound('descspee.mp3')
 
     elif mode == '4':
         # activate UNCOVer's ImageDescription operation mode
         print('Start Initalizing Image Description')
+        # perfrom ImageDescription using AZURE
         desc = Describe(visionSubKey, imageFile)
         desc.DescribeImage()
 
@@ -354,11 +367,12 @@ while True:
         descriptionText = desc.GetDescription()
         print(descriptionText)
 
-        # using PyAudio to output sound
+        # using AZURE to convert text unto sppech
         tts = TextToSpeech(ttsSubKey, 'Describe result: ' + descriptionText)
         tts.get_token()
         tts.save_audio('descspeech', 0)
 
+        # play the received audio file from AZURE 
         playSound('descspeech.mp3')
         
     else:
