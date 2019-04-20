@@ -59,7 +59,7 @@ Install the following dependencies via pip:
   pip install azure-cognitiveservices-speech
   pip install pyglet
   https://github.com/OlafenwaMoses/ImageAI/releases/download/2.0.2/imageai-2.0.2-py3-none-any.whl
-  
+  -
   pip install mutagen
   pip install Pillow
   pip install requests
