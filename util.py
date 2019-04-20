@@ -24,11 +24,23 @@ def getImageSize(image_path):
 
 
 def playSound(filepath):
+    '''
+        function to play sound result file according to the path given using function module playsound
+
+        @param filepath: Set filepath to the local path
+            of a sound file that you want to play.
+    '''
     playsound(filepath)
 
 
 class ObjectDetection(object):
     def __init__(self, subscription_key, image_path):
+        '''
+        constructor for ObjectDetection object
+
+        :param object   subscription key and iamgefile to be processed
+
+        '''
         self.subscription_key = subscription_key
         self.image_path = image_path
 
@@ -63,9 +75,11 @@ class ObjectDetection(object):
         # Read the image into a byte array
         image_data = open(self.image_path, "rb").read()
 
+        # HTTP request header
         headers = {'Ocp-Apim-Subscription-Key': subscription_key,
                    'Content-Type': 'application/octet-stream'}
         params = {'visualFeatures': 'Categories,Description,Color'}
+        # receiving result from API
         response = requests.post(
             analyze_url, headers=headers, params=params, data=image_data)
         response.raise_for_status()
@@ -77,6 +91,11 @@ class ObjectDetection(object):
         print('LOG: JSON response received...')
 
     def getDetectedObject(self):
+        '''
+        function to parse the received JSON from the AZURE Computer Vision API
+        unto readable list for further process
+
+        '''
         result = self.result
 
         objects_detected = []
@@ -119,10 +138,11 @@ class TextToSpeech(object):
                            + "/sts/v1.0/issueToken")
 
         print('LOG: Fetching token at ' + fetch_token_url)
-
+        # HTTP request header
         headers = {
             'Ocp-Apim-Subscription-Key': self.subscription_key
         }
+        # receiving result from API
         response = requests.post(fetch_token_url, headers=headers)
         self.access_token = str(response.text)
 
@@ -171,6 +191,7 @@ class TextToSpeech(object):
         voice.text = self.tts
         body = ElementTree.tostring(xml_body)
 
+        # receiving result from API
         response = requests.post(constructed_url, headers=headers, data=body)
         if response.status_code == 200:
             print('LOG: Saving audio as ' + filename + '...')
@@ -194,6 +215,11 @@ class TextToSpeech(object):
 
 class FingerDetection(object):
     def __init__(self, prediction_key, image_path):
+        '''
+        constructor for FingerDetection object
+
+        :param object   subscription key and iamgefile to be processed
+        '''
         self.prediction_key = prediction_key
         self.image_path = image_path
 
@@ -216,6 +242,7 @@ class FingerDetection(object):
         headers = {'Content-Type': 'application/octet-stream',
                    'Prediction-key': self.prediction_key}
 
+        # receiving result from API
         response = requests.post(
             req_url,
             headers=headers,
@@ -227,9 +254,14 @@ class FingerDetection(object):
         self.result = response.json()
 
     def getPrediction(self, minProb=0):
+        '''
+        function to parse the received JSON finger result from the AZURE Computer Vision API
+        unto readable list for further process
+
+        '''
         result = self.result
         detected = []
-        # # parse object names from JSON response
+        # parse object names from JSON response
         for dicts in result['predictions']:
             prob = dicts['probability']
 
@@ -252,10 +284,20 @@ class FingerDetection(object):
 
 class OCR(object):
     def __init__(self, sub_key, img_path):
+        '''
+        constructor for OpticalCharacterRecognition object
+
+        :param object   subscription key and iamgefile to be processed
+        '''
         self.sub_key = sub_key
         self.img_path = img_path
 
     def PerformOCR(self):
+        '''
+        Perform Optical Character Recognition
+        function to analyze image captured for text detection 
+        
+        '''
         assert self.sub_key
 
         vision_base_url = ("https://southeastasia.api.cognitive.microsoft.com/"
@@ -266,9 +308,11 @@ class OCR(object):
         # Read the image into a byte array
         image_data = open(self.img_path, "rb").read()
 
+        # HTTP request header
         headers = {'Ocp-Apim-Subscription-Key': self.sub_key,
                    'Content-Type': 'application/octet-stream'}
         params = {'language': 'unk', 'detectOrientation': 'true'}
+        # receiving result from API
         response = requests.post(
             ocr_url, headers=headers, params=params, data=image_data)
         response.raise_for_status()
@@ -276,6 +320,11 @@ class OCR(object):
         self.result = response.json()
 
     def GetTexts(self):
+        '''
+        function to parse the received JSON text result from the AZURE Computer Vision API
+        unto readable string for further process
+
+        '''
         text = ''
 
         for i in self.result['regions']:
@@ -290,10 +339,20 @@ class OCR(object):
 
 class Describe(object):
     def __init__(self, sub_key, img_path):
+        '''
+        constructor for ImageDescription object
+
+        :param object   subscription key and iamgefile to be processed
+        '''
         self.sub_key = sub_key
         self.img_path = img_path
 
     def DescribeImage(self):
+        '''
+        Describe image
+        function to describe image captured and output description of the scene
+        
+        '''
         assert self.sub_key
 
         vision_base_url = ("https://southeastasia.api.cognitive.microsoft.com/"
@@ -304,9 +363,11 @@ class Describe(object):
         # Read the image into a byte array
         image_data = open(self.img_path, "rb").read()
 
+        # HTTP request header
         headers = {'Ocp-Apim-Subscription-Key': self.sub_key,
                    'Content-Type': 'application/octet-stream'}
         params = {'maxCandidates': '1', 'language': 'en'}
+        # receiving result from API
         response = requests.post(
             desc_url, headers=headers, params=params, data=image_data)
         response.raise_for_status()
@@ -314,6 +375,11 @@ class Describe(object):
         self.result = response.json()
 
     def GetDescription(self):
+        '''
+        function to parse the received JSON description result from the AZURE Computer Vision API
+        unto readable form for further process
+
+        '''
         res = self.result
 
         try:
@@ -324,10 +390,20 @@ class Describe(object):
 
 class Analyze(object):
     def __init__(self, sub_key, img_path):
+        '''
+        constructor for ImageAnalyzation object
+
+        :param object   subscription key and iamgefile to be processed
+        '''
         self.sub_key = sub_key
         self.img_path = img_path
 
     def AnalyzeImage(self):
+        '''
+        Analyze image
+        function to analyze image captured for its detected brands ,detected dominant colors , image's scene description, and detected people 
+        
+        '''
         assert self.sub_key
 
         vision_base_url = ("https://southeastasia.api.cognitive.microsoft.com/"
@@ -341,10 +417,12 @@ class Analyze(object):
         # Read the image into a byte array
         image_data = open(self.img_path, "rb").read()
 
+        # HTTP request header
         headers = {'Ocp-Apim-Subscription-Key': self.sub_key,
                    'Content-Type': 'application/octet-stream'}
         params = {'visualFeatures': visualFeatures,
                   'details': 'Celebrities,Landmarks'}
+        # receiving result from API
         response = requests.post(
             analyze_url, headers=headers, params=params, data=image_data)
         response.raise_for_status()
@@ -354,22 +432,29 @@ class Analyze(object):
     def GetResult(self):
         '''
         Get analyze result
+        function to parse the received JSON ImageAnalyzation result from the AZURE Computer Vision API
+        unto readable form for further process
+        
 
         :return (colors[], brands[], desc, faces[(age, gender)]):
         '''
         res = self.result
 
         colors = []
+        # get only the dominant colors that detected
         for color in res['color']['dominantColors']:
             colors.append(color)
 
         brands = []
+        # get the detected brands
         for brand in res['brands']:
             brands.append(brand['name'])
 
+        # get description of the scene
         desc = res['description']['captions'][0]['text']
 
         faces = []
+        # get age and gender of detected people
         for face in res['faces']:
             faces.append((face['age'], face['gender']))
 
