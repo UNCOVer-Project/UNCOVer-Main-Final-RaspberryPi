@@ -15,7 +15,9 @@ from picamera import PiCamera
 from time import sleep
 from SpeechRecognition import SpeechRecognition
 
-# build camera instance
+# Build camera instance
+# Finalized 
+
 cam = PiCamera()
 
 
