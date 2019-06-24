@@ -1,5 +1,5 @@
 # Libs for text-to-speech
-# import os
+# import os 
 import requests
 from xml.etree import ElementTree
 
@@ -12,8 +12,8 @@ from PIL import Image
 
 def getImageSize(image_path):
     '''
-        function to get image width and height dimension
-
+        Function to get image width dimension and the height dimension
+        
         @param image_path: Set image_path to the local path
             of an image that you want to analyze.
     '''
