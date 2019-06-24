@@ -1,4 +1,4 @@
-# Impot PicCamea libary to run in Raspberry py
+# Impot PicCamea libary to run in Raspberry Py 3
 from picamera import PiCamera
 from time import sleep
 
