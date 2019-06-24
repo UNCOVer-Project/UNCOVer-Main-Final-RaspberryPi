@@ -46,7 +46,7 @@ def getFingersMiddlePos(fingerResult, shapesize):
 
 def findObjectLocation(listOfObj, img_size):
     '''
-        function to determine objects position (left | center | right)
+        function to determine objects position whether it is (left | center | right)
         with paritsize the image captured into 3 partition according to image's width.
         Get the center point of each object by dividing the width of each object by half and add the x (left) coordinate or distance
         then compare which boundary the object is in.
