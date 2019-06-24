@@ -84,5 +84,7 @@ Install the following dependencies via pip:
   <h5>A Quickstart guide on using Azure Custom Vision</h5>
   https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/
   <br/>
+  <br/>
+  
 
 
